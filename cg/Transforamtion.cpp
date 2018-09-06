@@ -92,19 +92,38 @@ Vector Matrix::multiplicate(Vector v, Matrix m)
 
 Vector Move::apply(const Vector &vector, Options &opt)
 {
-	double move_matrix[SIZE][SIZE] = {
-		{ 1, 0, 0, 0 },{ 0, 1, 0, 0 },{ 0, 0, 1, 0 },
-	{ opt[0], opt[1], opt[2], 1 }
+	double x = opt[0], y = opt[1], z = opt[2];
+	if (opt.inverse)
+	{
+		x *= -1; y *= -1; z *= -1;
+	}
+
+	double move_matrix[SIZE][SIZE] = 
+	{
+		{ 1, 0, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 0, 1, 0 },
+		{ x, y, z, 1 }
 	};
+
 	Vector vector(Matrix::multiplicate(vector, move_matrix));
 	return vector;
 }
 
 Vector Scale::apply(const Vector &vector, Options &opt)
 {
-	double scale_matrix[SIZE][SIZE] = {
-		{ opt[0], 0, 0, 0 },{ 0, opt[1], 0, 0 },
-	{ 0, 0, opt[2], 0 }, { 0, 0, 0, 1 }
+	double x = opt[0], y = opt[1], z = opt[2];
+	if (opt.inverse)
+	{
+		x = 1/x; y = 1/y; z = 1/z;
+	}
+
+	double scale_matrix[SIZE][SIZE] = 
+	{
+		{ x, 0, 0, 0 },
+		{ 0, y, 0, 0 },
+		{ 0, 0, z, 0 },
+		{ 0, 0, 0, 1 }
 	};
 	Vector vector(Matrix::multiplicate(vector, scale_matrix));
 	return vector;
@@ -112,33 +131,39 @@ Vector Scale::apply(const Vector &vector, Options &opt)
 
 Vector Rotate::rotateX(const Vector &vector, double angle)
 {
-	double rotate_matrix[SIZE][SIZE] = {
-		{ 1, 0, 0, 0 },
-	{ 0, cos(angle), -sin(angle), 0 },
-	{ 0, sin(angle), cos(angle), 0 },
-	{ 0, 0, 0, 1 } };
+	double rotate_matrix[SIZE][SIZE] = 
+	{
+		{ 1,	0,				0,			0 },
+		{ 0,	cos(angle),		sin(angle), 0 },
+		{ 0,	-sin(angle),	cos(angle), 0 },
+		{ 0,	 0,				0,			1 }
+	};
 	Vector vector(Matrix::multiplicate(vector, rotate_matrix));
 	return vector;
 }
 
 Vector Rotate::rotateY(const Vector &vector, double angle)
 {
-	double rotate_matrix[SIZE][SIZE] = {
-		{ cos(angle), 0, sin(angle), 0 },
-	{ 0, 1, 0, 0 },
-	{ -sin(angle), 0, cos(angle), 0 },
-	{ 0, 0, 0, 1 } }; 
+	double rotate_matrix[SIZE][SIZE] = 
+	{
+		{ cos(angle), 0,	 -sin(angle), 0 },
+		{ 0,		  1,	 0,			  0 },
+		{ sin(angle), 0,	 cos(angle),  0 },
+		{ 0,		  0,	 0,			  1 }
+	}; 
 	Vector vector(Matrix::multiplicate(vector, rotate_matrix));
 	return vector;
 }
 
 Vector Rotate::rotateZ(const Vector &vector, double angle)
 {
-	double rotate_matrix[SIZE][SIZE] = {
-		{ cos(angle), -sin(angle), 0, 0 },
-	{ sin(angle), cos(angle), 0, 0 },
-	{ 0, 0, 1, 0 },
-	{ 0, 0, 0, 1 } }; 
+	double rotate_matrix[SIZE][SIZE] = 
+	{
+		{  cos(angle), sin(angle), 0, 0 },
+		{ -sin(angle), cos(angle), 0, 0 },
+		{ 0,		   0,		   1, 0 },
+		{ 0,		   0,		   0, 1 } 
+	}; 
 	Vector vector(Matrix::multiplicate(vector, rotate_matrix));
 	return vector;
 }
@@ -147,6 +172,8 @@ Vector Rotate::apply(const Vector &vector, Options &opt)
 {
 	int choose = (int)opt[0];
 	double angle = opt[1];
+	if (opt.inverse)
+		angle *= -1;
 	Vector v;
 
 	switch (choose)

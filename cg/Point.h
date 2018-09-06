@@ -1,28 +1,33 @@
 #pragma once
 #include "Resource.h"
-#include "Figure.h"
+#include "Object.h"
+#include "Transformation.h"
 
 #define NO_POINT 0
 
 class Point
 {
+	void create();
+	void init(double a, double b, double c, double d);
+	void init(const Point &p);
 public:
-	double x, y, z;
+	double x, y, z, w;
 
 	/*Конструкторы */
 	Point();
 
 	Point(Point *p);
 	Point(const Point &point);
-	Point(double x, double y, double z);
+	Point(double a, double b, double c, double d);
+	Point(MoveOptions& opt);
 
 	double localX() const noexcept;
 	double localY() const noexcept;
 	double localZ() const noexcept;
 
-	double worldX(Figure f) const noexcept;
-	double worldY(Figure f) const noexcept;
-	double worldZ(Figure f) const noexcept;
+	double worldX(Object f) const noexcept;
+	double worldY(Object f) const noexcept;
+	double worldZ(Object f) const noexcept;
 
 	Point(Point &&point) noexcept;
 

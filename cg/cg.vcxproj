@@ -150,12 +150,14 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="cg.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Loader.h" />
     <ClInclude Include="Transformation.h" />
+    <ClInclude Include="TriangleList.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Figure.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tor.h" />

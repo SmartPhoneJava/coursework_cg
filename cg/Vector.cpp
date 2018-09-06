@@ -6,9 +6,9 @@
 
 Vector::Vector(Point &p1, Point &p2) noexcept
 {
-	this->x = p2.getX() - p1.getX();
-	this->y = p2.getY() - p1.getY();
-	this->z = p2.getZ() - p1.getZ();
+	this->x = p2.x - p1.x;
+	this->y = p2.y - p1.y;
+	this->z = p2.z - p1.z;
 }
 
 Vector::Vector(double x1, double y1, double z1,
@@ -116,6 +116,6 @@ bool Vector::operator!=(const Vector& other)noexcept
 
 Point Vector::asPoint()
 {
-	return Point(x, y, z);
+	return Point(x, y, z, 1);
 }
 

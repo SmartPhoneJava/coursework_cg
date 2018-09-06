@@ -1,7 +1,7 @@
 #pragma once
 #include "Point.h"
 #include <list>
-#include "Figure.h"
+#include "Object.h"
 
 class Triangle
 {
@@ -14,7 +14,7 @@ private:
 public:
 	//std::list<Point> points;
 
-	Figure *figure; // указатель на список вершин
+	Object *figure; // указатель на список вершин
 	int indexes[3]; // 3 индекса для выбора 3-ех точек
 
 	int state; // состояние полигона - активный, отсеченный и т.д.

@@ -64,55 +64,64 @@ double Point::getZ() const noexcept
 	return this->z;
 }
 */
-Point::Point() // конструктор класса
+void Point::init(double a, double b, double c, double d)
 {
-	x = 0;
-	y = 0;
-	z = 0;
+	x = a;
+	y = b;
+	z = c;
+	w = d;
 }
 
-Point::Point(double x, double y, double z) // конструктор класса
+void Point::init(const Point& p)
 {
-	x = 0;
-	y = 0;
-	z = 0;
+	init(p.x, p.y, p.z, p.w);
+}
+
+void Point::create()
+{
+	init(0, 0, 0, 1);
+}
+
+Point::Point() // конструктор класса
+{
+	create();
+}
+
+Point::Point(double a, double b, double c, double d) // конструктор класса
+{
+	init(a, b, c, d);
+}
+
+Point::Point(MoveOptions& opt)
+{
+	init(opt[0], opt[1], opt[2], 1);
 }
 
 Point::Point(Point *point) // конструктор класса
 {
-	x = point->x;
-	y = point->y;
-	z = point->z;
+	init(*point);
 }
 
 // конструктор копирования
 Point::Point(const Point &point)
 {
-	x = point.x;
-	y = point.y;
-	z = point.z;
+	init(point);
 }
 
 Point::Point(Point &&point) noexcept
 {
-	x = point.x;
-	y = point.y;
-	z = point.z;
+	init(point);
 }
 
 Point& Point::operator=(const Point& other) noexcept
 {
-	x = other.x;
-	y = other.y;
-	z = other.z;
+	init(other);
 	return *this;
 }
 
 Point& Point::operator=(Point&& other)noexcept
 {
-	x = other.x;
-	y = other.y;
-	z = other.z;
+	init(other);
 	return *this;
 }
 
@@ -144,17 +153,17 @@ double Point::localZ() const noexcept
 	return z;
 }
 
-double Point::worldX(Figure f) const noexcept
+double Point::worldX(Object f) const noexcept
 {
 	return x + f.center.x;
 }
 
-double Point::worldY(Figure f) const noexcept
+double Point::worldY(Object f) const noexcept
 {
 	return y + f.center.y;
 }
 
-double Point::worldZ(Figure f) const noexcept
+double Point::worldZ(Object f) const noexcept
 {
 	return z + f.center.z;
 }

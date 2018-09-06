@@ -3,17 +3,24 @@
 #include "Vector.h"
 #include <iostream>
 
+#define AXIS_X 101
+#define AXIS_Y 102
+#define AXIS_Z 103
+#define NOTHING 0
+
 #define SIZE 4
 class Options
 {
 public:
 	double params[3];
+	bool inverse;
 	Options() {};
 	Options(double a, double b, double c)
 	{
 		params[0] = a;
 		params[1] = b;
 		params[2] = c;
+		inverse = false;
 	};
 
 	double& operator[] (int index)
@@ -30,43 +37,60 @@ public:
 /*
 param[0/1/2] - сдвиг по x/y/z
 */
-class Move_options : Options
+class MoveOptions : public Options
 {
-	Move_options()
+public:
+	MoveOptions()
 	{
 		params[0] = 0;
 		params[1] = 0;
 		params[2] = 0;
+		inverse = false;
+	}
+
+	MoveOptions(Point p)
+	{
+		params[0] = p.x;
+		params[1] = p.y;
+		params[2] = p.z;
+		inverse = false;
+	}
+	MoveOptions(Point p, bool in)
+	{
+		params[0] = p.x;
+		params[1] = p.y;
+		params[2] = p.z;
+		inverse = in;
 	}
 }; 
 
-class Scale_options : Options
+class ScaleOptions : public Options
 {
-	Scale_options()
+public:
+	ScaleOptions()
 	{
 		params[0] = 1;
 		params[1] = 1;
 		params[2] = 1;
+		inverse = false;
 	}
 };
 /*
 param[0/1/2] - коэффициент масштабирования x/y/z
 */
 
-#define AXIS_X 101
-#define AXIS_Y 102
-#define AXIS_Z 103
-#define NOTHING 0
 
-struct Rotate_options : Options
+struct RotateOptions : public Options
 {
-	Rotate_options()
+public:
+	RotateOptions()
 	{
 		params[0] = NOTHING;
 		params[1] = 0;
 		params[2] = 0;
+		inverse = false;
 	}
-	Rotate_options(int choose, double angle)
+	RotateOptions(int choose, double angle, bool in = false)
 	{
 		params[2] = 0;
 		params[1] = angle;
@@ -92,6 +116,7 @@ struct Rotate_options : Options
 			std::cout << "Указана несуществующая ось поворота" << choose;
 			params[1] = 0;
 		}
+		inverse = in;
 	}
 };
 /*
@@ -105,12 +130,12 @@ public:
 	virtual Vector apply(const Vector &v, Options &opt) = 0;
 };
 
-class Move : Action
+class Move : public Action
 {
 	Vector apply(const Vector &v, Options &opt) override;
 };
 
-class Rotate : Action
+class Rotate : public Action
 {
 private:
 	Vector rotateX(const Vector &v, double angle);
@@ -120,7 +145,7 @@ public:
 	Vector apply(const Vector &v, Options &opt) override;
 };
 
-class Scale : Action
+class Scale : public Action
 {
 	Vector apply(const Vector &v, Options &opt) override;
 };
